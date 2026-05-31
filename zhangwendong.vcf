@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 17.3.1//EN
+N:张;文东;;;
+FN:文东 张
+ORG:专业推拿服务，高级按摩师;
+EMAIL;type=INTERNET;type=WORK;type=pref:wuvhol@outlook.com
+TEL;type=CELL;type=VOICE;type=pref:177 2286 0193
+item1.TEL:170 9823 3825
+item1.X-ABLabel:微信同号
+NOTE:2007年考取高级按摩师资格，擅长用手法缓解疲劳，减轻疼痛
+END:VCARD
