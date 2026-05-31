@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>张文东 | 高级按摩师</title>
+    <style>
+        :root {
+            --primary: #5b7c6b; /* 治愈系鼠尾草绿 */
+            --bg: #f4f7f5;
+            --text-dark: #2c3e35;
+            --text-light: #5a6e63;
+        }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text-dark); 
+            margin: 0; 
+            padding: 20px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card { 
+            background: #ffffff; 
+            max-width: 380px; 
+            width: 100%;
+            border-radius: 24px; 
+            padding: 40px 30px; 
+            box-shadow: 0 12px 40px rgba(0,0,0,0.06); 
+            text-align: center; 
+            box-sizing: border-box;
+        }
+        .avatar { 
+            width: 90px; 
+            height: 90px; 
+            background: var(--primary); 
+            color: white; 
+            font-size: 32px; 
+            font-weight: bold;
+            line-height: 90px; 
+            border-radius: 50%; 
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(91, 124, 107, 0.3);
+        }
+        h1 { margin: 0 0 5px; font-size: 26px; }
+        .title { color: var(--primary); font-size: 13px; font-weight: 700; letter-spacing: 2px; margin-bottom: 25px; }
+        
+        /* 核心文案横批设计 */
+        .slogan { 
+            font-size: 19px; 
+            font-weight: 800; 
+            background: #edf2f0; 
+            padding: 20px 10px; 
+            border-radius: 16px; 
+            margin-bottom: 25px;
+            line-height: 1.5;
+            color: var(--primary);
+        }
+        .slogan span { display: block; font-size: 14px; font-weight: normal; margin-top: 8px; color: var(--text-light); }
+        
+        .bio { font-size: 14px; color: var(--text-light); text-align: justify; line-height: 1.7; margin-bottom: 30px; }
+        
+        .info-box { 
+            text-align: left; 
+            font-size: 13px; 
+            background: #fafafa; 
+            padding: 18px; 
+            border-radius: 16px; 
+            margin-bottom: 30px; 
+            border: 1px solid #f0f0f0;
+            line-height: 2;
+        }
+        
+        /* 按钮设计 */
+        .btn { 
+            display: block; 
+            width: 100%; 
+            padding: 14px 0; 
+            background: var(--primary); 
+            color: #fff; 
+            text-decoration: none; 
+            border-radius: 30px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            margin-bottom: 15px; 
+            transition: all 0.3s;
+        }
+        .btn-outline { 
+            background: transparent; 
+            color: var(--primary); 
+            border: 2px solid var(--primary); 
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="avatar">张</div>
+        
+        <h1>张文东</h1>
+        <div class="title">高级按摩师</div>
+        
+        <div class="slogan">
+            回收疲劳和疼痛<br>生产舒适与轻松
+            <span>让身心，回归最佳出厂设置</span>
+        </div>
+        
+        <div class="bio">
+            自2007年获得国家高级资格以来，我始终专注通过精准纯粹的手法为您卸下疲惫。我所致力于的，不仅是为您减轻身体的疼痛，更是为您创造极致放松的体验，将您的身心同步唤醒、提升至最佳状态。
+        </div>
+        
+        <div class="info-box">
+            📍 <strong>线下出诊：</strong>广州市滨江路及周边上门服务<br>
+            ⏳ <strong>从业资历：</strong>自 2007 年至今<br>
+            📰 <strong>主理专栏：</strong>众源之声 / 展融文化
+        </div>
+        
+        <!-- 名片直链 -->
+        <a href="zhangwendong.vcf" class="btn">存入手机通讯录</a>
+        
+        <!-- 电话预约直链（可将13800000000修改为您的真实号码） -->
+        <a href="tel:17722860193" class="btn btn-outline">拨打电话预约</a>
+    </div>
+</body>
+</html>
