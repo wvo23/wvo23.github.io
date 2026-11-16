@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+# Node
+node_modules/
+dist/
+.pnpm-store/
+# 模型文件（体积大，另行获取）
+*.onnx
+*.pt
+*.mlmodel
+*.mlpackage/
+# 系统
+.DS_Store
+.idea/
+.vscode/
+*.swp
+# 输出
+outputs/
+*.log
