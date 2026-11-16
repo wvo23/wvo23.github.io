@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="融境" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <title>融境 · 智能换背景</title>
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root { --bg:#0f172a; --card:#1e293b; --text:#f1f5f9; --muted:#94a3b8;
+      --brand:linear-gradient(135deg,#6366f1,#a855f7,#ec4899); --brand1:#6366f1; --ok:#22c55e; }
+    html,body { margin:0; padding:0; background:var(--bg); color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif; min-height:100vh; }
+    .wrap { max-width:520px; margin:0 auto; padding:calc(env(safe-area-inset-top) + 20px) 18px calc(env(safe-area-inset-bottom) + 30px); }
+    header { text-align:center; margin-bottom:22px; }
+    h1 { margin:0; font-size:27px; font-weight:800; background:var(--brand);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .subtitle { color:var(--muted); font-size:13px; margin-top:6px; }
+    .card { background:var(--card); border-radius:18px; padding:16px; margin-bottom:16px; box-shadow:0 6px 24px rgba(0,0,0,.25); }
+    .card h2 { margin:0 0 12px; font-size:15px; color:#cbd5e1; display:flex; align-items:center; gap:8px; }
+    .step { display:inline-flex; width:22px;height:22px;border-radius:50%;background:var(--brand1);color:#fff;font-size:13px;align-items:center;justify-content:center;font-weight:700; }
+    .upload { border:2px dashed #475569; border-radius:14px; min-height:130px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; background:#0b1220; }
+    .upload img { max-width:100%; max-height:220px; display:none; border-radius:10px; }
+    .hint { color:var(--muted); font-size:13px; text-align:center; line-height:1.9; }
+    .hint .big { font-size:30px; display:block; }
+    .file-input { position:absolute; inset:0; opacity:0; width:100%; height:100%; cursor:pointer; }
+    .rechoose { position:absolute; bottom:8px; right:8px; background:rgba(0,0,0,.6); color:#fff; font-size:11px; padding:4px 10px; border-radius:20px; }
+    .bg-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .bg-option { border-radius:12px; overflow:hidden; border:3px solid transparent; cursor:pointer; aspect-ratio:3/4; position:relative; background-size:cover; background-position:center; transition:.15s; }
+    .bg-option.active { border-color:var(--brand1); transform:scale(1.03); }
+    .bg-option span { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,.75)); color:#fff; font-size:11px; text-align:center; padding:14px 2px 5px; }
+    .bg-custom { margin-top:12px; border:1px dashed #475569; border-radius:12px; padding:10px; text-align:center; font-size:13px; color:var(--muted); position:relative; overflow:hidden; }
+    .bg-custom img { display:none; max-height:90px; border-radius:8px; margin:0 auto 6px; }
+    .result-box { background:#0b1220; border-radius:14px; min-height:200px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
+    .result-box img { width:100%; display:none; }
+    .result-ph { color:#475569; font-size:13px; text-align:center; padding:40px 20px; }
+    #progressPanel { display:none; margin-bottom:16px; }
+    .pbar-bg { height:8px; background:#0b1220; border-radius:10px; overflow:hidden; margin-top:8px; }
+    #progressBar { height:100%; width:0%; background:var(--brand); border-radius:10px; transition:width .3s; }
+    #progressText { font-size:12px; color:var(--muted); }
+    .btn { width:100%; border:none; border-radius:14px; padding:15px; font-size:16px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .btn-primary { background:var(--brand); color:#fff; box-shadow:0 6px 20px rgba(99,102,241,.4); }
+    .btn-primary:disabled { opacity:.45; box-shadow:none; }
+    .btn-save { background:var(--ok); color:#fff; margin-top:10px; display:none; }
+    .btn-ghost { background:transparent; color:var(--muted); font-size:13px; padding:10px; margin-top:6px; }
+    details { margin-bottom:16px; }
+    summary { cursor:pointer; color:var(--muted); font-size:13px; padding:6px 0; list-style:none; }
+    summary::-webkit-details-marker { display:none; }
+    summary::before { content:'⚙️ '; }
+    .slider-row { margin-bottom:12px; }
+    .slider-row label { display:flex; justify-content:space-between; font-size:12px; color:#cbd5e1; margin-bottom:4px; }
+    input[type=range] { width:100%; accent-color:var(--brand1); }
+    .note { color:var(--muted); font-size:11px; line-height:1.7; text-align:center; margin-top:16px; }
+    #installTip { display:none; position:fixed; left:0; right:0; bottom:0; z-index:99; background:linear-gradient(135deg,#1e293b,#0f172a); border-top:1px solid #334155; padding:14px 18px calc(env(safe-area-inset-bottom) + 14px); box-shadow:0 -6px 24px rgba(0,0,0,.5); }
+    #installTip .row { display:flex; align-items:center; gap:12px; }
+    #installTip .ic { font-size:26px; }
+    #installTip .txt { flex:1; font-size:12px; line-height:1.6; color:#cbd5e1; }
+    #installTip b { color:#fff; }
+    #installTip .close { color:var(--muted); font-size:20px; padding:4px 8px; cursor:pointer; }
+    .savehint { color:#64748b; font-size:11px; text-align:center; margin-top:8px; }
+    #errorBar { display:none; background:#7f1d1d; color:#fecaca; border:1px solid #b91c1c; border-radius:12px; padding:12px 14px; margin-bottom:14px; font-size:12px; line-height:1.6; }
+    #errorBar b { color:#fff; }
+    #diagBox { display:none; background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px 12px; margin-top:8px; font-size:11px; color:#94a3b8; line-height:1.8; word-break:break-all; font-family:monospace; }
+    .diag-toggle { color:#64748b; font-size:11px; text-align:center; margin-top:14px; cursor:pointer; text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header><h1>融境 · 智能换背景</h1><div class="subtitle">人物不变 · 光影自然相融 · 照片不上传</div></header>
+    <div id="errorBar"></div>
+    <div class="card">
+      <h2><span class="step">1</span>上传人物照片</h2>
+      <div class="upload">
+        <div class="hint" id="uploadHint"><span class="big">📷</span>点击拍照或从相册选择<br/>人物主体越清晰效果越好</div>
+        <img id="personPreview" alt="人物预览" />
+        <span class="rechoose">重新选择</span>
+        <input type="file" id="personInput" class="file-input" accept="image/*" />
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="step">2</span>选择新背景</h2>
+      <div class="bg-grid">
+        <div class="bg-option" data-bg="park" style="background-image:url('./backgrounds/park.png')"><span>🏞️ 户外公园</span></div>
+        <div class="bg-option active" data-bg="room" style="background-image:url('./backgrounds/room.png')"><span>🛋️ 暖色室内</span></div>
+        <div class="bg-option" data-bg="office" style="background-image:url('./backgrounds/office.png')"><span>🏢 冷色办公室</span></div>
+      </div>
+      <div class="bg-custom"><img id="bgCustomPreview" alt="自定义背景" /><div>或使用自己的背景图</div><input type="file" id="bgInput" class="file-input" accept="image/*" /></div>
+    </div>
+    <div id="progressPanel"><div id="progressText">准备中…</div><div class="pbar-bg"><div id="progressBar"></div></div></div>
+    <button class="btn btn-primary" id="generateBtn" disabled>✨ 一键生成融合效果</button>
+    <div class="card" style="margin-top:16px">
+      <h2><span class="step">3</span>效果预览</h2>
+      <div class="result-box"><div class="result-ph" id="resultPlaceholder">生成结果会显示在这里<br/>长按图片可保存到相册</div><img id="resultImage" alt="融合结果" /></div>
+      <button class="btn btn-save" id="saveBtn">💾 保存图片</button>
+      <div class="savehint" id="saveHint" style="display:none">也可长按上方图片 → 存储到照片</div>
+      <button class="btn btn-ghost" id="resetBtn">重新选择照片</button>
+    </div>
+    <details>
+      <summary>高级调节（一般保持默认）</summary>
+      <div class="card">
+        <div class="slider-row"><label>人物大小 <span id="scaleValue">1.0</span></label><input type="range" id="scaleSlider" min="0.5" max="1.5" step="0.05" value="1.0"></div>
+        <div class="slider-row"><label>水平位置 <span id="posXValue">0.5</span></label><input type="range" id="posXSlider" min="0" max="1" step="0.01" value="0.5"></div>
+        <div class="slider-row"><label>垂直位置 <span id="posYValue">0.92</span></label><input type="range" id="posYSlider" min="0.5" max="1" step="0.01" value="0.92"></div>
+        <div class="slider-row"><label>色调融合 <span id="colorValue">0.7</span></label><input type="range" id="colorSlider" min="0" max="1.5" step="0.05" value="0.7"></div>
+        <div class="slider-row"><label>光照融合 <span id="lightValue">0.6</span></label><input type="range" id="lightSlider" min="0" max="1.5" step="0.05" value="0.6"></div>
+        <div class="slider-row"><label>阴影强度 <span id="shadowValue">0.45</span></label><input type="range" id="shadowSlider" min="0" max="1" step="0.05" value="0.45"></div>
+        <div class="slider-row"><label>边缘羽化 <span id="featherValue">1</span></label><input type="range" id="featherSlider" min="0" max="4" step="1" value="1"></div>
+      </div>
+    </details>
+    <div class="note">全部处理在本机完成，照片不会上传服务器。<br/>首次使用会下载约 80MB 的 AI 模型，之后离线可用。<br/>💡 iPhone 安装：用 Safari 打开 → 分享 → 添加到主屏幕</div>
+    <div class="diag-toggle" id="diagToggle">诊断信息（遇到问题时点开）</div>
+    <div id="diagBox"></div>
+  </div>
+  <div id="installTip"><div class="row"><div class="ic">📲</div><div class="txt">安装到主屏幕，像 APP 一样全屏使用：<br/><b>点底部「分享」按钮 → 「添加到主屏幕」</b></div><div class="close" id="closeTip">✕</div></div></div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
